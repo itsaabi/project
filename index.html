@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver Login and Registration</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Animate.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <!-- Font Awesome for loading spinner -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #151516, #bdbdfd);
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 50px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .container {
+        background: linear-gradient(90deg, #6fbbf7, #979796);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        max-width: 600px;
+        width: 100%;
+        animation: fadeInDown 1s ease-in-out;
+        position: relative;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        color: #333;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        animation: fadeIn 1.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .profile-picture {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        animation: slideInDown 0.5s ease-in-out;
+      }
+      
+      p {
+        margin-top: 0px;
+        margin-bottom: 1rem;
+        padding-left: 150px;
+      }
+
+      .profile-picture img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid #007bff;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .profile-picture img:hover {
+        transform: scale(1.1);
+        border-color: #0056b3;
+      }
+
+      .upload-text {
+        display: block;
+        margin-top: 0.5rem;
+        color: #007bff;
+        font-weight: 500;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .profile-picture:hover .upload-text {
+        color: #0056b3;
+      }
+
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+        animation: slideInLeft 0.5s ease-in-out;
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        color: #555;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+        font-family: "Poppins", sans-serif;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+        transform: scale(1.02);
+      }
+
+      .form-group select {
+        appearance: none;
+        background: url('data:image/svg+xml;utf8,<svg fill="%23007bff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+          no-repeat right 0.75rem center/12px 12px;
+        padding-right: 2.5rem;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .form-group select:hover {
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+      }
+
+      .error-message {
+        color: #ff3b2f;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .submit-btn {
+        width: 50%;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+        margin: 0 auto;
+        display: block;
+        position: relative;
+      }
+
+      .submit-btn:hover {
+        background: linear-gradient(135deg, #0056b3, #007bff);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 123, 255, 0.3);
+      }
+
+      .submit-btn .spinner {
+        display: none;
+        margin-right: 8px;
+      }
+
+      .submit-btn.loading .spinner {
+        display: inline-block;
+      }
+
+      .toggle-link {
+        text-align: right;
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        padding-right: 8rem;
+      }
+
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        display: none;
+      }
+
+      .loading-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .loading-spinner {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #007bff;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1.5rem;
+          max-width: 90%;
+        }
+
+        h2 {
+          font-size: 1.75rem;
+        }
+
+        p {
+          margin-top: 0px;
+          margin-bottom: 1rem;
+          padding-left: 35px;
+        }
+
+        .form-group input,
+        .form-group select {
+          padding: 0.5rem;
+          font-size: 0.9rem;
+        }
+
+        .toggle-link {
+          padding-right: 0;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-content">
+        <div class="loading-spinner">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+        <p id="loadingText">Processing your request...</p>
+      </div>
+    </div>
+
+    <div class="container animate__animated animate__fadeInDown">
+      <!-- Login Form -->
+      <form id="login-form">
+        <h2>Welcome Back, Driver!</h2>
+        <p>Please login to your account</p>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input
+            type="email"
+            id="login-email"
+            placeholder="Enter your email"
+            required
+          />
+          <div class="error-message" id="login-email-error">
+            Please enter a valid email address
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Enter your password"
+            required
+          />
+          <div class="error-message" id="login-password-error">
+            Password must be at least 8 characters
+          </div>
+        </div>
+        <div class="error-message" id="login-error">
+          Invalid credentials. Please try again.
+        </div>
+
+        <button type="submit" class="submit-btn" id="login-btn">
+          <i class="fas fa-spinner fa-spin spinner"></i>
+          Login
+        </button>
+        <div class="toggle-link">
+          Don't have an account? <a href="#" id="register-link">Register</a>
+        </div>
+      </form>
+
+      <!-- Registration Form -->
+      <form id="register-form" style="display: none">
+        <h2>Driver Registration</h2>
+
+        <!-- Profile Picture -->
+        <div class="profile-picture">
+          <input type="file" id="profilePic" accept="image/*" hidden />
+          <label for="profilePic">
+            <img
+              src="default-profile-icon.png"
+              alt="Profile Picture"
+              id="profilePreview"
+            />
+            <span class="upload-text">Upload Profile Picture</span>
+          </label>
+          <div class="error-message" id="profile-pic-error">
+            Please upload a profile picture
+          </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="form-group">
+          <label for="full-name">Vehicle Owner Name</label>
+          <input
+            type="text"
+            id="full-name"
+            placeholder="Enter your full name"
+            pattern="[A-Za-z\s]+"
+            title="Only alphabets and spaces are allowed."
+            required
+          />
+          <div class="error-message" id="full-name-error">
+            Please enter your full name (letters and spaces only)
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" required />
+          <div class="error-message" id="dob-error">
+            Please select your date of birth
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select id="gender" required>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="error-message" id="gender-error">
+            Please select your gender
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cnic">CNIC/NICOP Number</label>
+          <input
+            type="text"
+            id="cnic"
+            placeholder="Enter your CNIC/NICOP number (e.g., 12345-6789012-3)"
+            pattern="\d{5}-\d{7}-\d{1}"
+            title="CNIC/NICOP must be in the format 12345-6789012-3."
+            required
+          />
+          <div class="error-message" id="cnic-error">
+            Please enter a valid CNIC/NICOP number (12345-6789012-3)
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Contact Number</label>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="Enter your contact number (e.g., 0300-1234567)"
+            pattern="\d{4}-\d{7}"
+            title="Contact number must be in the format 0300-1234567."
+            required
+          />
+          <div class="error-message" id="phone-error">
+            Please enter a valid contact number (0300-1234567)
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+          />
+          <div class="error-message" id="email-error">
+            Please enter a valid email address
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password (min 8 characters)"
+            minlength="8"
+            required
+          />
+          <div class="error-message" id="password-error">
+            Password must be at least 8 characters
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="license-number">License Number</label>
+          <input
+            type="text"
+            id="license-number"
+            placeholder="Enter your license number (e.g., ABC-1234567)"
+            pattern="[A-Za-z]{2,3}-\d{5,7}"
+            title="License number must be in the format ABC-1234567."
+            required
+          />
+          <div class="error-message" id="license-number-error">
+            Please enter a valid license number (ABC-1234567)
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="vehicle-reg-number">Vehicle Registration Number</label>
+          <input
+            type="text"
+            id="vehicle-reg-number"
+            placeholder="Enter vehicle registration number"
+            required
+          />
+          <div class="error-message" id="vehicle-reg-number-error">
+            Please enter your vehicle registration number
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="vehicle-type">Vehicle Type</label>
+          <select id="vehicle-type" required>
+            <option value="">Select Vehicle Type</option>
+            <option value="car">Car</option>
+            <option value="motorcycle">Bike</option>
+            <option value="truck">Auto</option>
+          </select>
+          <div class="error-message" id="vehicle-type-error">
+            Please select your vehicle type
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="vehicle-pic">Vehicle Picture</label>
+          <input type="file" id="vehicle-pic" accept="image/*" required />
+          <div class="error-message" id="vehicle-pic-error">
+            Please upload a picture of your vehicle
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <textarea
+            id="address"
+            placeholder="Enter your address"
+            rows="3"
+            required
+          ></textarea>
+          <div class="error-message" id="address-error">
+            Please enter your address
+          </div>
+        </div>
+        <button type="submit" class="submit-btn" id="register-btn">
+          <i class="fas fa-spinner fa-spin spinner"></i>
+          Register
+        </button>
+        <div class="toggle-link">
+          Already have an account? <a href="#" id="login-link">Login</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Web3.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <!-- IPFS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
+    <!-- Custom Script -->
+    <script>
+      // ==============================================
+      // DOM Elements and Variables
+      // ==============================================
+      const loginForm = document.getElementById("login-form");
+      const registerForm = document.getElementById("register-form");
+      const registerLink = document.getElementById("register-link");
+      const loginLink = document.getElementById("login-link");
+      const loadingOverlay = document.getElementById("loadingOverlay");
+      const loadingText = document.getElementById("loadingText");
+
+      const profilePicInput = document.getElementById("profilePic");
+      const profilePreview = document.getElementById("profilePreview");
+
+      // Smart Contract Address and ABI
+      const contractAddress = "0xF92F1143e9d318E70b2dfBf9CA726C95d23C7f38"; // Replace with your contract address
+      const contractABI = [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "driverAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "name": "DriverRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "driverAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "status",
+          "type": "bool"
+        }
+      ],
+      "name": "DriverStatusChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "driverAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "profilePictureCID",
+          "type": "string"
+        }
+      ],
+      "name": "ProfileUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "driverAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "vehiclePictureCID",
+          "type": "string"
+        }
+      ],
+      "name": "VehicleUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "drivers",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "vehicleOwnerName",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "dateOfBirth",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "gender",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "cnic",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "contactNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "passwordHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "licenseNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "vehicleRegNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "vehicleType",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "addressDetails",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "profilePictureCID",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "vehiclePictureCID",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "isRegistered",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "name": "emailToAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_email",
+          "type": "string"
+        }
+      ],
+      "name": "getDriver",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "vehicleOwnerName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "dateOfBirth",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "gender",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "cnic",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "contactNumber",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "email",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "passwordHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "string",
+              "name": "licenseNumber",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "vehicleRegNumber",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "vehicleType",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "addressDetails",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "profilePictureCID",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "vehiclePictureCID",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isRegistered",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct RideHailing.Driver",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getDriverCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_email",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_passwordHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "login",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "vehicleOwnerName",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "dateOfBirth",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "gender",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "cnic",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "contactNumber",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "email",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "licenseNumber",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "vehicleRegNumber",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "vehicleType",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "addressDetails",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "passwordHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "string",
+              "name": "profilePictureCID",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "vehiclePictureCID",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct RideHailing.RegistrationParams",
+          "name": "params",
+          "type": "tuple"
+        }
+      ],
+      "name": "registerDriver",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "registeredDrivers",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_driver",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_status",
+          "type": "bool"
+        }
+      ],
+      "name": "setDriverStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_profilePictureCID",
+          "type": "string"
+        }
+      ],
+      "name": "updateProfilePicture",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_vehiclePictureCID",
+          "type": "string"
+        }
+      ],
+      "name": "updateVehiclePicture",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ];
+
+      // Initialize Web3 and Contract
+      let web3;
+      let contract;
+
+      async function initWeb3() {
+        if (typeof window.ethereum !== "undefined") {
+          try {
+            await window.ethereum.request({ method: "eth_requestAccounts" });
+            web3 = new Web3(window.ethereum);
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+          } catch (error) {
+            console.error("Error connecting to MetaMask:", error);
+            showError("Error connecting to MetaMask. Please try again.");
+          }
+        } else {
+          showError("Please install MetaMask to use this application!");
+        }
+      }
+
+      // ==============================================
+      // UI Helper Functions
+      // ==============================================
+
+      function showLoading(message = "Processing your request...") {
+        loadingText.textContent = message;
+        loadingOverlay.style.display = "flex";
+      }
+
+      function hideLoading() {
+        loadingOverlay.style.display = "none";
+      }
+
+      function showError(message, elementId = null) {
+        if (elementId) {
+          const errorElement = document.getElementById(elementId);
+          errorElement.textContent = message;
+          errorElement.style.display = "block";
+        } else {
+          alert(message);
+        }
+      }
+
+      function hideError(elementId) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+          errorElement.style.display = "none";
+        }
+      }
+
+      function validateForm(formId) {
+        let isValid = true;
+        const form = document.getElementById(formId);
+        const inputs = form.querySelectorAll("input, select, textarea");
+
+        inputs.forEach(input => {
+          if (input.required && !input.value.trim()) {
+            const errorId = `${input.id}-error`;
+            showError(`This field is required`, errorId);
+            isValid = false;
+          } else if (input.pattern && !new RegExp(input.pattern).test(input.value)) {
+            const errorId = `${input.id}-error`;
+            showError(input.title || "Invalid format", errorId);
+            isValid = false;
+          } else if (input.minlength && input.value.length < input.minlength) {
+            const errorId = `${input.id}-error`;
+            showError(`Minimum ${input.minlength} characters required`, errorId);
+            isValid = false;
+          } else {
+            const errorId = `${input.id}-error`;
+            hideError(errorId);
+          }
+        });
+
+        return isValid;
+      }
+
+      // ==============================================
+      // Event Listeners
+      // ==============================================
+
+      // Toggle between Login and Registration forms
+      registerLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginForm.style.display = "none";
+        registerForm.style.display = "block";
+      });
+
+      loginLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        registerForm.style.display = "none";
+        loginForm.style.display = "block";
+      });
+
+      // Profile Picture Upload and Display
+      profilePicInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          try {
+            validateFile(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              profilePreview.src = e.target.result;
+              hideError("profile-pic-error");
+            };
+            reader.readAsDataURL(file);
+          } catch (error) {
+            showError(error.message, "profile-pic-error");
+          }
+        }
+      });
+
+      // Vehicle Picture Upload Validation
+      document.getElementById("vehicle-pic").addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          try {
+            validateFile(file);
+            hideError("vehicle-pic-error");
+          } catch (error) {
+            showError(error.message, "vehicle-pic-error");
+          }
+        }
+      });
+
+      // Handle Registration Form Submission
+      registerForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        // Validate form before submission
+        if (!validateForm("register-form")) {
+          return;
+        }
+
+        const registerBtn = document.getElementById("register-btn");
+        registerBtn.classList.add("loading");
+        registerBtn.disabled = true;
+
+        showLoading("Registering your account...");
+        
+        try {
+          await handleRegistration();
+        } catch (error) {
+          console.error("Registration error:", error);
+          showError("Registration failed: " + error.message);
+        } finally {
+          registerBtn.classList.remove("loading");
+          registerBtn.disabled = false;
+          hideLoading();
+        }
+      });
+
+      // Handle Login Form Submission
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        // Validate form before submission
+        if (!validateForm("login-form")) {
+          return;
+        }
+
+        const loginBtn = document.getElementById("login-btn");
+        loginBtn.classList.add("loading");
+        loginBtn.disabled = true;
+
+        showLoading("Logging in...");
+        
+        try {
+          await handleLogin();
+        } catch (error) {
+          console.error("Login error:", error);
+          showError("Login failed: " + error.message, "login-error");
+        } finally {
+          loginBtn.classList.remove("loading");
+          loginBtn.disabled = false;
+          hideLoading();
+        }
+      });
+
+      // ==============================================
+      // Helper Functions
+      // ==============================================
+
+      // Hash Password Function
+      async function hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return web3.utils.bytesToHex(hashArray);
+      }
+
+      function validateFile(file, maxSizeMB = 5) {
+        const allowedTypes = ["image/jpeg", "image/png"];
+        if (!allowedTypes.includes(file.type)) {
+          throw new Error("Invalid file type. Only JPEG and PNG are allowed.");
+        }
+        if (file.size > maxSizeMB * 1024 * 1024) {
+          throw new Error(`File size must be less than ${maxSizeMB}MB.`);
+        }
+      }
+
+      // Save Data to IPFS
+      async function saveToIPFS(data) {
+        try {
+          const ipfs = window.IpfsHttpClient.create({
+            host: "127.0.0.1",
+            port: 5001,
+            protocol: "http",
+          });
+
+          showLoading("Uploading to IPFS...");
+          const { cid } = await ipfs.add(JSON.stringify(data));
+          return cid.toString();
+        } catch (error) {
+          console.error("IPFS upload error:", error);
+          throw new Error("Failed to upload to IPFS");
+        }
+      }
+
+      // Handle Registration
+      async function handleRegistration() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Hash the password
+        const hashedPassword = await hashPassword(password);
+
+        // Prepare data for IPFS
+        const driverData = {
+          profilePic: await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(profilePicInput.files[0]);
+          }),
+          vehiclePic: await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(document.getElementById("vehicle-pic").files[0]);
+          }),
+        };
+
+        // Save data to IPFS and get CID
+        showLoading("Uploading profile picture...");
+        const profileCID = await saveToIPFS(driverData.profilePic);
+        
+        showLoading("Uploading vehicle picture...");
+        const vehicleCID = await saveToIPFS(driverData.vehiclePic);
+
+        // Prepare registration parameters
+        const registrationParams = {
+          vehicleOwnerName: document.getElementById("full-name").value,
+          dateOfBirth: document.getElementById("dob").value,
+          gender: document.getElementById("gender").value,
+          cnic: document.getElementById("cnic").value,
+          contactNumber: document.getElementById("phone").value,
+          email: email,
+          licenseNumber: document.getElementById("license-number").value,
+          vehicleRegNumber: document.getElementById("vehicle-reg-number").value,
+          vehicleType: document.getElementById("vehicle-type").value,
+          addressDetails: document.getElementById("address").value,
+          passwordHash: hashedPassword,
+          profilePictureCID: profileCID,
+          vehiclePictureCID: vehicleCID,
+        };
+
+        // Save data to Smart Contract
+        showLoading("Registering on blockchain...");
+        const accounts = await web3.eth.getAccounts();
+        await contract.methods
+          .registerDriver(registrationParams)
+          .send({ from: accounts[0] });
+
+        alert("Registration successful!");
+        loginForm.style.display = "block";
+        registerForm.style.display = "none";
+      }
+
+      // Handle Login
+      async function handleLogin() {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        // Hash the password
+        const hashedPassword = await hashPassword(password);
+
+        // Call the login function on the smart contract
+        const accounts = await web3.eth.getAccounts();
+        const isValid = await contract.methods
+          .login(email, hashedPassword)
+          .call({ from: accounts[0] });
+
+        if (isValid) {
+          // Fetch the driver's IPFS CID from the smart contract
+          const driverData = await contract.methods.getDriver(email).call();
+          const ipfsCID = driverData.profilePictureCID;
+
+          // Store email and IPFS CID in localStorage
+          localStorage.setItem("driverEmail", email);
+          localStorage.setItem("ipfsCID", ipfsCID);
+
+          // Redirect to the profile page
+          window.location.href = "profile.html";
+        } else {
+          showError("Invalid credentials. Please try again.", "login-error");
+        }
+      }
+
+      // Initialize Web3 and Contract
+      initWeb3();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver Profile</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Animate.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <!-- Custom CSS -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #151516, #bdbdfd);
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        height: 140vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .profile-container {
+        background: linear-gradient(135deg, #673ab7, #f0f0f0);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgb(63, 63, 63);
+        backdrop-filter: blur(10px);
+        max-width: 800px;
+        width: 100%;
+        animation: slideInFromRight 1s ease-in-out;
+      }
+
+      @keyframes slideInFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        color: #333;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        animation: fadeIn 1.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .profile-picture {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        animation: slideInDown 0.5s ease-in-out;
+      }
+
+      .profile-picture img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 4px solid #007bff;
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .profile-picture img:hover {
+        transform: scale(1.1);
+        border-color: #0056b3;
+      }
+
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .profile-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        animation: fadeIn 1.5s ease-in-out;
+      }
+
+      .profile-details div {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .profile-details div:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 10px rgb(250, 208, 145);
+      }
+
+      .profile-details label {
+        display: block;
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .profile-details p {
+        font-size: 1rem;
+        color: #333;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      /* Container for vehicle and license pictures */
+      .pictures-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        animation: fadeIn 1.5s ease-in-out;
+      }
+
+      /* Vehicle Pictures Section */
+      .vehicle-pictures {
+        flex: 1;
+        max-width: 50%; /* Limit width to half of the container */
+      }
+
+      .vehicle-pictures img {
+        width: 100%;
+        max-width: 200px;
+        border-radius: 10px;
+        margin: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .vehicle-pictures img:hover {
+        transform: scale(1.1);
+      }
+
+      /* License Picture Section */
+      .license-picture {
+        flex: 1;
+        max-width: 50%; /* Limit width to half of the container */
+        text-align: right; /* Align license picture to the right */
+      }
+
+      .license-picture img {
+        width: 100%;
+        max-width: 200px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .license-picture img:hover {
+        transform: scale(1.1);
+      }
+      @media (max-width: 768px) {
+        .profile-container {
+          padding: 1.5rem;
+          max-width: 90%;
+        }
+
+        .profile-details {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <h2>Driver Profile</h2>
+
+      <!-- Profile Picture -->
+      <div class="profile-picture">
+        <img
+          id="profileImage"
+          src="default-profile-icon.png"
+          alt="Profile Picture"
+        />
+      </div>
+
+      <!-- Profile Details -->
+      <div class="profile-details">
+        <div>
+          <label>Vehicle Owner Name</label>
+          <p id="fullName"></p>
+        </div>
+        <div>
+          <label>Date of Birth</label>
+          <p id="dob"></p>
+        </div>
+        <div>
+          <label>Gender</label>
+          <p id="gender"></p>
+        </div>
+        <div>
+          <label>CNIC/NICOP Number</label>
+          <p id="cnic"></p>
+        </div>
+        <div>
+          <label>Contact Number</label>
+          <p id="phone"></p>
+        </div>
+        <div>
+          <label>Email Address</label>
+          <p id="email"></p>
+        </div>
+        <div>
+          <label>License Number</label>
+          <p id="licenseNumber"></p>
+        </div>
+        <div>
+          <label>Vehicle Type</label>
+          <p id="vehicleType"></p>
+        </div>
+        <div>
+          <label>Address</label>
+          <p id="address"></p>
+        </div>
+      </div>
+
+      <!-- Vehicle and License Pictures -->
+      <div class="pictures-container">
+        <!-- Vehicle Pictures -->
+        <div class="vehicle-pictures">
+          <h3>Vehicle Pictures</h3>
+          <div id="vehicleImages"></div>
+        </div>
+
+        <!-- License Picture -->
+        <div class="license-picture">
+          <h3>License Picture</h3>
+          <div id="licenseImage"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- IPFS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
+    <!-- Custom Script -->
+    <script>
+      async function fetchAndDisplayProfile() {
+  const email = localStorage.getItem("driverEmail");
+  const ipfsCID = localStorage.getItem("ipfsCID");
+
+  if (!email || !ipfsCID) {
+    alert("No user data found. Please login again.");
+    window.location.href = "driverLogin.html"; // Redirect to login page
+    return;
+  }
+
+  try {
+    // Fetch data from IPFS
+    const ipfs = window.IpfsHttpClient.create({
+      host: "127.0.0.1",
+      port: 5001,
+      protocol: "http",
+    });
+
+    const chunks = [];
+    for await (const chunk of ipfs.cat(ipfsCID)) {
+      chunks.push(chunk);
+    }
+
+    const dataString = chunks
+      .map((chunk) => new TextDecoder().decode(chunk))
+      .join("");
+    const userData = JSON.parse(dataString);
+
+    console.log("User Data:", userData); // Debugging
+
+    // Display Profile Data
+    document.getElementById("fullName").textContent = userData.fullName || "N/A";
+    document.getElementById("dob").textContent = userData.dob || "N/A";
+    document.getElementById("gender").textContent = userData.gender || "N/A";
+    document.getElementById("cnic").textContent = userData.cnic || "N/A";
+    document.getElementById("phone").textContent = userData.phone || "N/A";
+    document.getElementById("email").textContent = email;
+    document.getElementById("licenseNumber").textContent =
+      userData.licenseNumber || "N/A";
+    document.getElementById("vehicleType").textContent =
+      userData.vehicleType || "N/A";
+    document.getElementById("address").textContent = userData.address || "N/A";
+
+    // Display Profile Picture
+    document.getElementById("profileImage").src =
+      userData.profilePic || "images/default-profile-icon.png";
+
+    // Display License Picture
+    document.getElementById("licenseImage").innerHTML = `
+      <img src="${userData.licensePic || "images/default-license-icon.png"}" alt="License Picture" />
+    `;
+
+    // Display Vehicle Pictures
+    const vehicleImagesContainer = document.getElementById("vehicleImages");
+    vehicleImagesContainer.innerHTML = ""; // Clear previous content
+
+    if (userData.vehiclePics && Array.isArray(userData.vehiclePics)) {
+      userData.vehiclePics.forEach((pic) => {
+        vehicleImagesContainer.innerHTML += `
+          <img src="${pic}" alt="Vehicle Picture" />
+        `;
+      });
+    } else {
+      vehicleImagesContainer.innerHTML = "<p>No vehicle pictures available.</p>";
+    }
+  } catch (error) {
+    console.error("Error fetching profile data:", error);
+    alert("Failed to fetch profile data. Please try again.");
+  }
+}
+
+      // Fetch and display profile data on page load
+      fetchAndDisplayProfile();
+    </script>
+  </body>
+</html>

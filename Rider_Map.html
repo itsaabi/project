@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Sharing App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: #888;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-item span {
+            font-size: 0.9rem;
+        }
+
+        .nav-item.active {
+            color: #007bff;
+            transform: translateY(-10px);
+        }
+
+        .nav-item:hover {
+            color: #007bff;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 12px;
+            display: none;
+        }
+
+        /* Map Modal Styles */
+        .map-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1002;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        /* Location Panel Styles */
+        .location-panel {
+    position: absolute;
+    background: linear-gradient(to right, #efe8e6, #f3bb90); /* keep this */
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    /* background: white; ← REMOVE this line */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+
+        .location-panel.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .panel-toggle {
+            position: absolute;
+            right: -40px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgb(139, 126, 252);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .panel-toggle i {
+            transition: transform 0.3s ease;
+        }
+
+        .location-panel.collapsed .panel-toggle i {
+            transform: rotate(180deg);
+        }
+
+        /* Location Input Styles */
+        .location-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .location-input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .location-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+        }
+
+        .origin-input {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .destination-input {
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .location-input::placeholder {
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: #888;
+            font-size: 18px;
+        }
+
+        .origin-icon {
+            color: #007bff;
+        }
+
+        .destination-icon {
+            color: #ff6b6b;
+        }
+
+        #get-directions-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        } 
+
+        #get-directions-btn:hover {
+            background-color: #0069d9;
+        }
+
+        #get-directions-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        #get-directions-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        .swap-locations {
+            position: absolute;
+            right: 10px;
+            top: 40px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .swap-locations:hover {
+            background: #e0e0e0;
+            transform: rotate(180deg);
+        }
+
+        /* Ride Info Section - Updated to show below direction button */
+        .ride-info {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            padding: 0;
+            transition: all 0.3s ease;
+            max-height: 300px;
+            overflow: hidden;
+        }
+
+        .ride-info.collapsed {
+            max-height: 50px;
+        }
+
+        .ride-info-header {
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f7a2;
+            border-radius: 12px;
+        }
+
+        .ride-info-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ride-info-header i {
+            transition: transform 0.3s ease;
+        }
+
+        .ride-info.collapsed .ride-info-header i {
+            transform: rotate(180deg);
+        }
+
+        .ride-info-content {
+            padding: 15px;
+        }
+
+        .ride-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .ride-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+    display: inline;
+        }
+
+        .distance-value {
+            color: #007bff;
+        }
+
+        /* Payment Input */
+        .payment-input-group {
+            margin-top: 15px;
+        }
+
+        .payment-input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .payment-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+        }
+
+        .payment-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: #888;
+            font-size: 18px;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: absolute;
+            bottom: 20px;
+            left: 427px;
+            right: 58px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-family: "Poppins", sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 8px;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .action-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .action-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        .confirm-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background-color: #0069d9;
+        }
+
+        .cancel-btn {
+            background-color: white;
+            color: #333;
+        }
+
+        .cancel-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Permission Modal Styles */
+        .permission-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1003;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .permission-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 25px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.4s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .permission-container h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .permission-container p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .permission-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .permission-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .allow-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .allow-btn:hover {
+            background-color: #0069d9;
+        }
+
+        .deny-btn {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .deny-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Driver Match Modal */
+        .driver-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1005;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .driver-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 25px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .driver-container h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .driver-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .driver-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #007bff;
+        }
+
+        .driver-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .driver-rating {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        .driver-car {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .driver-fare {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 15px 0;
+            color: #007bff;
+        }
+
+        .driver-eta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .driver-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .nav-item.active i {
+            animation: bounce 0.5s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .location-panel {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+
+            .nav-item span {
+                font-size: 0.8rem;
+            }
+            
+            .location-panel {
+                width: 90%;
+            }
+            
+            .action-buttons {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+            
+            .action-btn {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            .input-icon {
+                top: 35px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="nav-item" id="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item" id="find-ride">
+                <i class="fas fa-taxi"></i>
+                <span>Find Ride</span>
+            </div>
+            <div class="nav-item" id="payment">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment</span>
+            </div>
+            <div class="nav-item" id="notifications">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+                <div class="notification-badge" id="notification-badge">0</div>
+            </div>
+            <div class="nav-item" id="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Map Modal -->
+    <div class="map-modal" id="map-modal">
+        <div class="map-container">
+            <div id="map"></div>
+            
+            <!-- Location Panel -->
+            <div class="location-panel" id="location-panel">
+                <div class="panel-toggle" id="panel-toggle">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                
+                <div class="location-inputs">
+                    <div class="input-group">
+                        <label for="origin-input">Current Location</label>
+                        <i class="fas fa-map-marker-alt input-icon origin-icon"></i>
+                        <input type="text" id="origin-input" class="location-input origin-input" placeholder="Detecting your location..." readonly>
+                    </div>
+                    <div class="input-group">
+                        <label for="destination-input">Destination</label>
+                        <i class="fas fa-flag-checkered input-icon destination-icon"></i>
+                        <input type="text" id="destination-input" class="location-input destination-input" placeholder="Where do you want to go?">
+                        <div class="swap-locations" id="swap-locations">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Input Field -->
+                    <div class="input-group payment-input-group">
+                        <label for="payment-input">Enter Payment Amount (PKR)</label>
+                        <i class="fas fa-money-bill-wave payment-icon"></i>
+                        <input type="number" id="payment-input" class="payment-input" placeholder="Enter amount in PKR">
+                    </div>
+                </div>
+                
+                <button id="get-directions-btn">
+                    <i class="fas fa-directions"></i> Find Route
+                </button>
+                
+                <!-- Ride Info Section - Moved below the direction button -->
+                <div class="ride-info collapsed" id="ride-info">
+                    <div class="ride-info-header" id="ride-info-toggle">
+                        <h3><i class="fas fa-route"></i> Ride Details</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="ride-info-content" id="ride-details">
+                        <div class="ride-detail">
+                            <span class="detail-label">From:</span>
+                            <span class="detail-value" id="ride-from">-</span>
+                        </div>
+                        <div class="ride-detail">
+                            <span class="detail-label">To:</span>
+                            <span class="detail-value" id="ride-to">-</span>
+                        </div>
+                        <div class="ride-detail">
+                            <span class="detail-label">Distance:</span>
+                            <span class="detail-value distance-value" id="ride-distance">-</span>
+                        </div>
+                        <div class="ride-detail">
+                            <span class="detail-label">Duration:</span>
+                            <span class="detail-value" id="ride-duration">-</span>
+                        </div>
+                        <div class="ride-detail">
+                            <span class="detail-label">Rider Fare:</span>
+                            <span class="detail-value" id="ride-fare">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loading-spinner">
+                <i class="fas fa-spinner"></i>
+                <p>Finding best route...</p>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn cancel-btn" id="cancel-btn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="action-btn confirm-btn" id="confirm-ride-btn" disabled>
+                    <i class="fas fa-car"></i> Request Ride
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Permission Modal -->
+    <div class="permission-modal" id="permission-modal">
+        <div class="permission-container">
+            <h3>Enable Location Services</h3>
+            <p>To find rides near you, we need access to your location</p>
+            <div class="permission-buttons">
+                <button class="permission-btn deny-btn" id="deny-location">Not Now</button>
+                <button class="permission-btn allow-btn" id="allow-location">Allow Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Driver Match Modal -->
+    <div class="driver-modal" id="driver-modal">
+        <div class="driver-container">
+            <h3>Driver Found!</h3>
+            
+            <div class="driver-info">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Driver" class="driver-avatar" id="driver-avatar">
+                <h4 class="driver-name" id="driver-name">John D.</h4>
+                <div class="driver-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.7</span>
+                </div>
+                <p class="driver-car" id="driver-car">Toyota Corolla • White • ABC-1234</p>
+                <p class="driver-eta" id="driver-eta">ETA: 5 minutes</p>
+            </div>
+            
+            <div class="driver-fare" id="driver-fare">PKR 0.00</div>
+            
+            <div class="driver-buttons">
+                <button class="permission-btn deny-btn" id="reject-driver">
+                    <i class="fas fa-times"></i> Reject
+                </button>
+                <button class="permission-btn allow-btn" id="accept-driver">
+                    <i class="fas fa-check"></i> Accept
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOLanVMv6TpHj1LZPwwF9o2kGV3fKBNCk&libraries=places&callback=initMap" async defer></script>
+    
+    <script>
+        // Global Variables
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        let userMarker;
+        let userLocation = null;
+        let originAutocomplete;
+        let destinationAutocomplete;
+        let watchPositionId = null;
+        let currentRoute = null;
+        let rideInfoCollapsed = true;
+        let isManualLocation = false;
+        let isFindingDriver = false;
+        let currentDriverIndex = 0;
+        let availableDrivers = [];
+        let riderFare = 0;
+
+        // Sample driver data (in a real app, this would come from your backend)
+        const sampleDrivers = [
+            {
+                id: "DRV001",
+                name: "John D.",
+                avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                car: "Toyota Corolla • White • ABC-1234",
+                rating: 4.7,
+                eta: "5 minutes",
+                fare: 1200
+            },
+            {
+                id: "DRV002",
+                name: "Sarah M.",
+                avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                car: "Honda Civic • Black • XYZ-5678",
+                rating: 4.9,
+                eta: "7 minutes",
+                fare: 1100
+            },
+            {
+                id: "DRV003",
+                name: "Mike T.",
+                avatar: "https://randomuser.me/api/portraits/men/75.jpg",
+                car: "Nissan Altima • Silver • DEF-9012",
+                rating: 4.5,
+                eta: "3 minutes",
+                fare: 1300
+            }
+        ];
+
+        // DOM Elements
+        const mapModal = document.getElementById('map-modal');
+        const permissionModal = document.getElementById('permission-modal');
+        const driverModal = document.getElementById('driver-modal');
+        const locationPanel = document.getElementById('location-panel');
+        const panelToggle = document.getElementById('panel-toggle');
+        const originInput = document.getElementById('origin-input');
+        const destinationInput = document.getElementById('destination-input');
+        const paymentInput = document.getElementById('payment-input');
+        const rideFrom = document.getElementById('ride-from');
+        const rideTo = document.getElementById('ride-to');
+        const rideDistance = document.getElementById('ride-distance');
+        const rideDuration = document.getElementById('ride-duration');
+        const rideFare = document.getElementById('ride-fare');
+        const swapLocations = document.getElementById('swap-locations');
+        const rideInfo = document.getElementById('ride-info');
+        const rideInfoToggle = document.getElementById('ride-info-toggle');
+        const confirmRideBtn = document.getElementById('confirm-ride-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const allowLocationBtn = document.getElementById('allow-location');
+        const denyLocationBtn = document.getElementById('deny-location');
+        const findRideBtn = document.getElementById('find-ride');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const getDirectionsBtn = document.getElementById('get-directions-btn');
+        const driverAvatar = document.getElementById('driver-avatar');
+        const driverName = document.getElementById('driver-name');
+        const driverCar = document.getElementById('driver-car');
+        const driverEta = document.getElementById('driver-eta');
+        const driverFare = document.getElementById('driver-fare');
+        const rejectDriverBtn = document.getElementById('reject-driver');
+        const acceptDriverBtn = document.getElementById('accept-driver');
+
+        // Initialize the application
+        function initApp() {
+            // Event Listeners
+            findRideBtn.addEventListener('click', handleFindRide);
+            allowLocationBtn.addEventListener('click', allowLocationHandler);
+            denyLocationBtn.addEventListener('click', denyLocationHandler);
+            swapLocations.addEventListener('click', swapLocationsHandler);
+            confirmRideBtn.addEventListener('click', confirmRideHandler);
+            cancelBtn.addEventListener('click', cancelRideHandler);
+            rideInfoToggle.addEventListener('click', toggleRideInfo);
+            panelToggle.addEventListener('click', toggleLocationPanel);
+            getDirectionsBtn.addEventListener('click', calculateAndDisplayRoute);
+            rejectDriverBtn.addEventListener('click', rejectDriverHandler);
+            acceptDriverBtn.addEventListener('click', acceptDriverHandler);
+            
+            // Payment input listener
+            paymentInput.addEventListener('input', updateRiderFare);
+            
+            // Initialize map click listener
+            map.addListener('click', (e) => {
+                if (isManualLocation) {
+                    getAddressFromLatLng(e.latLng).then(address => {
+                        originInput.value = address;
+                        userLocation = e.latLng;
+                        updateUserMarker();
+                        originInput.readOnly = false;
+                    });
+                }
+            });
+        }
+
+        // Update rider fare when payment input changes
+        function updateRiderFare() {
+            const amount = parseFloat(paymentInput.value) || 0;
+            riderFare = amount;
+            rideFare.textContent = `PKR ${amount.toFixed(2)}`;
+        }
+
+        // Initialize Map (called by Google Maps API callback)
+        function initMap() {
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({
+                suppressMarkers: false,
+                polylineOptions: {
+                    strokeColor: '#007bff',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 6
+                }
+            });
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 0, lng: 0 },
+                zoom: 15,
+                mapTypeControl: false,
+                streetViewControl: false,
+                styles: [
+                    {
+                        "featureType": "poi",
+                        "stylers": [
+                            { "visibility": "off" }
+                        ]
+                    }
+                ]
+            });
+            
+            directionsRenderer.setMap(map);
+            
+            // Initialize Autocomplete for destination input with country restriction
+            destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput, {
+                types: ['geocode'],
+                componentRestrictions: {country: 'pk'} // Pakistan restriction
+            });
+            
+            destinationAutocomplete.addListener('place_changed', onPlaceChanged);
+            
+            // Initialize the app
+            initApp();
+        }
+
+        // Toggle location panel
+        function toggleLocationPanel() {
+            locationPanel.classList.toggle('collapsed');
+        }
+
+        // Update user marker position
+        function updateUserMarker() {
+            if (userMarker) {
+                userMarker.setPosition(userLocation);
+            } else {
+                userMarker = new google.maps.Marker({
+                    position: userLocation,
+                    map: map,
+                    title: 'Your Location',
+                    icon: {
+                        url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                        scaledSize: new google.maps.Size(40, 40)
+                    }
+                });
+            }
+        }
+
+        // Toggle ride info
+        function toggleRideInfo() {
+            rideInfoCollapsed = !rideInfoCollapsed;
+            rideInfo.classList.toggle('collapsed', rideInfoCollapsed);
+        }
+
+        // Handle Find Ride button click
+        function handleFindRide() {
+            // Show permission modal first
+            permissionModal.style.display = 'flex';
+        }
+
+        // Handle Allow Location button click
+        function allowLocationHandler() {
+            permissionModal.style.display = 'none';
+            openMapModal();
+            getUserLocation();
+        }
+
+        // Handle Deny Location button click
+        function denyLocationHandler() {
+            permissionModal.style.display = 'none';
+            openMapModal();
+            originInput.value = '';
+            originInput.placeholder = 'Enter your location manually';
+            originInput.readOnly = false;
+            isManualLocation = true;
+        }
+
+        // Open Map Modal
+        function openMapModal() {
+            mapModal.style.display = 'flex';
+        }
+
+        // Get User Location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                originInput.value = 'Detecting your location...';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        updateUserLocation(position);
+                        watchPositionId = navigator.geolocation.watchPosition(
+                            updateUserLocation,
+                            handleLocationError,
+                            { enableHighAccuracy: true }
+                        );
+                    },
+                    handleLocationError,
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
+            } else {
+                originInput.placeholder = 'Enter your location manually';
+                originInput.readOnly = false;
+                isManualLocation = true;
+            }
+        }
+
+        // Update User Location on Map
+        function updateUserLocation(position) {
+            userLocation = new google.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude
+            );
+            
+            // Update origin input
+            getAddressFromLatLng(userLocation).then(address => {
+                originInput.value = address;
+                map.setCenter(userLocation);
+                updateUserMarker();
+            });
+        }
+
+        // Handle Location Errors
+        function handleLocationError(error) {
+            originInput.value = '';
+            originInput.placeholder = 'Enter your location manually';
+            originInput.readOnly = false;
+            isManualLocation = true;
+            
+            if (error.code === error.PERMISSION_DENIED) {
+                alert("Location permission denied. Please allow location access to use this feature.");
+            } else if (error.code === error.POSITION_UNAVAILABLE) {
+                alert("Location information is unavailable.");
+            } else if (error.code === error.TIMEOUT) {
+                alert("The request to get user location timed out.");
+            }
+        }
+
+        // Get Address from LatLng
+        function getAddressFromLatLng(latlng) {
+            return new Promise((resolve, reject) => {
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ location: latlng }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        resolve(results[0].formatted_address);
+                    } else {
+                        resolve(`${latlng.lat().toFixed(6)}, ${latlng.lng().toFixed(6)}`);
+                    }
+                });
+            });
+        }
+
+        // Handle Place Selection in Autocomplete
+        function onPlaceChanged() {
+            const place = destinationAutocomplete.getPlace();
+            
+            if (!place.geometry) {
+                rideFrom.textContent = '-';
+                rideTo.textContent = '-';
+                rideDistance.textContent = '-';
+                rideDuration.textContent = '-';
+                rideFare.textContent = '-';
+                confirmRideBtn.disabled = true;
+                return;
+            }
+            
+            // Automatically calculate and display route when destination is selected
+            calculateAndDisplayRoute();
+        }
+
+        // Calculate and Display Route
+        function calculateAndDisplayRoute() {
+            if (!userLocation || !destinationInput.value || !map) return;
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            
+            const request = {
+                origin: userLocation,
+                destination: destinationInput.value,
+                travelMode: 'DRIVING',
+                provideRouteAlternatives: false,
+                drivingOptions: {
+                    departureTime: new Date(),
+                    trafficModel: 'bestguess'
+                },
+                unitSystem: google.maps.UnitSystem.METRIC
+            };
+            
+            directionsService.route(request, (result, status) => {
+                // Hide loading spinner
+                loadingSpinner.style.display = 'none';
+                
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    currentRoute = result;
+                    
+                    // Display route info
+                    const route = result.routes[0].legs[0];
+                    rideFrom.textContent = route.start_address;
+                    rideTo.textContent = route.end_address;
+                    rideDistance.textContent = route.distance.text;
+                    rideDuration.textContent = route.duration.text;
+                    
+                    // Update rider fare if payment input has value
+                    if (paymentInput.value) {
+                        updateRiderFare();
+                    } else {
+                        rideFare.textContent = 'PKR 0.00';
+                    }
+                    
+                    // Enable confirm ride button
+                    confirmRideBtn.disabled = false;
+                    
+                                       // Show ride info if collapsed
+                                       if (rideInfoCollapsed) toggleRideInfo();
+                    
+                    // Center the map on the route
+                    const bounds = new google.maps.LatLngBounds();
+                    bounds.extend(route.start_location);
+                    bounds.extend(route.end_location);
+                    map.fitBounds(bounds);
+                } else {
+                    alert("Could not calculate route: " + status);
+                    confirmRideBtn.disabled = true;
+                }
+            });
+        }
+
+        // Swap Origin and Destination
+        function swapLocationsHandler() {
+            if (!originInput.value || !destinationInput.value) return;
+            
+            const temp = originInput.value;
+            originInput.value = destinationInput.value;
+            destinationInput.value = temp;
+            
+            // If we have a current location, update the map
+            if (userLocation) {
+                getAddressFromLatLng(userLocation).then(address => {
+                    originInput.value = address;
+                    calculateAndDisplayRoute();
+                });
+            } else {
+                calculateAndDisplayRoute();
+            }
+        }
+
+        // Confirm Ride Handler
+        function confirmRideHandler() {
+            if (!currentRoute) return;
+            
+            // Show loading state
+            confirmRideBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finding Driver...';
+            confirmRideBtn.disabled = true;
+            isFindingDriver = true;
+            
+            // Simulate finding a driver (in a real app, this would be an API call)
+            availableDrivers = [...sampleDrivers];
+            currentDriverIndex = 0;
+            
+            setTimeout(() => {
+                showDriverMatch();
+            }, 2000);
+        }
+
+        // Show Driver Match Modal
+        function showDriverMatch() {
+            if (currentDriverIndex >= availableDrivers.length) {
+                // No more drivers available
+                alert("No drivers available at this time. Please try again later.");
+                resetConfirmButton();
+                return;
+            }
+            
+            const driver = availableDrivers[currentDriverIndex];
+            
+            // Update modal with driver info
+            driverAvatar.src = driver.avatar;
+            driverName.textContent = driver.name;
+            driverCar.textContent = driver.car;
+            driverEta.textContent = `ETA: ${driver.eta}`;
+            driverFare.textContent = `PKR ${driver.fare.toFixed(2)}`;
+            
+            // Show modal
+            driverModal.style.display = 'flex';
+            
+            // Reset confirm button
+            resetConfirmButton();
+        }
+
+        // Reject Driver Handler
+        function rejectDriverHandler() {
+            driverModal.style.display = 'none';
+            currentDriverIndex++;
+            
+            if (currentDriverIndex < availableDrivers.length) {
+                // Show next driver after a delay
+                setTimeout(() => {
+                    showDriverMatch();
+                }, 1000);
+            } else {
+                alert("No more drivers available. Please try again later.");
+            }
+        }
+
+        // Accept Driver Handler
+        function acceptDriverHandler() {
+            driverModal.style.display = 'none';
+            alert(`Ride confirmed with ${availableDrivers[currentDriverIndex].name}!`);
+            
+            // Reset the UI
+            resetUI();
+        }
+
+        // Cancel Ride Handler
+        function cancelRideHandler() {
+            if (isFindingDriver) {
+                if (confirm("Are you sure you want to cancel finding a driver?")) {
+                    resetUI();
+                }
+            } else {
+                resetUI();
+            }
+        }
+
+        // Reset Confirm Button
+        function resetConfirmButton() {
+            confirmRideBtn.innerHTML = '<i class="fas fa-car"></i> Request Ride';
+            confirmRideBtn.disabled = false;
+            isFindingDriver = false;
+        }
+
+        // Reset UI
+        function resetUI() {
+            // Clear the route
+            directionsRenderer.setMap(null);
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+            
+            // Reset inputs
+            destinationInput.value = '';
+            paymentInput.value = '';
+            
+            // Reset ride info
+            rideFrom.textContent = '-';
+            rideTo.textContent = '-';
+            rideDistance.textContent = '-';
+            rideDuration.textContent = '-';
+            rideFare.textContent = '-';
+            
+            // Reset buttons
+            confirmRideBtn.disabled = true;
+            isFindingDriver = false;
+            
+            // Center map on user location if available
+            if (userLocation) {
+                map.setCenter(userLocation);
+            }
+            
+            // Collapse ride info if expanded
+            if (!rideInfoCollapsed) toggleRideInfo();
+        }
+
+        // Initialize the app when the window loads
+        window.onload = function() {
+            // Set the active nav item
+            document.getElementById('find-ride').classList.add('active');
+            
+            // Show a notification badge (demo purposes)
+            document.getElementById('notification-badge').style.display = 'block';
+            document.getElementById('notification-badge').textContent = '3';
+        };
+    </script>
+</body>
+</html>
